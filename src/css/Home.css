@@ -22,12 +22,12 @@ body {
 }
 
 .notes {
-    overflow-y: auto;
+    overflow-y: scroll;
     border-radius: 15px;
     margin-left: 5%;
     /* border: 1px solid red; */
     display: grid;
-    place-content: center;
+    /* place-content: center; */
     grid-template-columns: 460px 460px 460px;
     width: 90%;
     height: 80%;
@@ -38,6 +38,9 @@ body {
     font-size: 0.8em;
     margin: 3%;
     border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     /* border: 1px solid green; */
     height: 300px;
     margin: 2%;
@@ -49,6 +52,7 @@ body {
 }
 
 .add-button {
+    /* border: 1px solid red; */
     margin: 3%;
     background-color: transparent;
     border-radius: 20px;
@@ -83,11 +87,20 @@ body {
     background-color: orange;
 }
 
+.submit:hover{
+    transform: scale(110%);
+}
+
 .row {
     /* border: 1px solid red; */
+    padding: 2%;
     height: 50px;
     width: 100%;
     display: flex;
     justify-content: flex-end;
     align-items: end;
+}
+
+.btn:hover{
+    transform: scale(130%);
 }

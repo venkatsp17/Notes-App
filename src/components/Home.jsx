@@ -1,13 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import '../css/Home.css';
 import { MdDelete, MdEdit } from 'react-icons/md'
 
 
 const Home = () => {
 
+    useEffect(() => {
+
+    }, []);
+
     const [title, Settitle] = useState("");
     const [descript, Setdescript] = useState("");
     const [note, Setnote] = useState([]);
+    const [val, setVal] = useState(false);
 
     const handlechange = (event) => {
         console.log("fun1");
@@ -21,17 +26,18 @@ const Home = () => {
     const additem = () => {
         console.log("fun3");
         let id;
-        if(note.length==null){
-            id = 1;
+        if (note.length == null) {
+            id = 0``;
         }
-        else{
+        else {
             id = note.length + 1;
         }
         const newitem = {
             "id": id,
             "title": title,
             "content": descript,
-            "color": generateColor()
+            "color": generateColor(),
+            "edit": "false",
         };
         Setnote([...note, newitem]);
     }
@@ -56,17 +62,28 @@ const Home = () => {
             <h1>Notes</h1>
             <div className="notes">
                 {
-                    note.map((elem) => {
+                    note.map((elem, index) => {
                         return (
-                            <div className="note" style={{ backgroundColor: `${elem.color}` }}>
-                                <div>
-                                    <h2>{elem.id}</h2>
-                                    <h2>{elem.title}</h2>
-                                    <p>{elem.content}</p>
+                            <div>
+                                <div className={`${elem.edit === "false" ? "note" : "note ab"}`} style={{ backgroundColor: `${elem.color}` }}>
+                                    <div>
+                                        <h2>{elem.id}</h2>
+                                        <h2>{elem.title}</h2>
+                                        <p>{elem.content}</p>
+                                    </div>
+                                    <div className="row">
+                                        <MdDelete className="btn" onClick={() => removeitem(elem.id)} size={25} style={{ color: "red" }} />
+                                        <MdEdit className="btn" onClick={() => { let newarr = new Array(note); console.log(note); newarr[index].edit = "true"; Setnote(newarr); }} size={25} style={{ color: "orange" }} />
+                                    </div>
                                 </div>
-                                <div className="row">
-                                    <MdDelete className="btn" onClick={() => removeitem(elem.id)} size={25} style={{ color: "red" }} />
-                                    <MdEdit className="btn" size={25} style={{ color: "orange" }} />
+                                <div className={`${elem.edit === "true" ? "add-button" : "add-button ab"}`}>
+                                    <label>Title</label>
+                                    <input className="title" value={title} onChange={handlechange} />
+                                    <label for="content">Description</label>
+                                    <textarea className="textarea1" value={descript} onChange={handlechange1} />
+                                    <div className="row">
+                                        <input type="button" id="submit" className="submit" value={"Add"} onClick={additem} />
+                                    </div>
                                 </div>
                             </div>
                         )

@@ -12,7 +12,8 @@ const Home = () => {
     const [title, Settitle] = useState("");
     const [descript, Setdescript] = useState("");
     const [note, Setnote] = useState([]);
-    const [val, setVal] = useState(false);
+    const [ctitle, Setctitle] = useState("");
+    const [cdescript, Setcdescript] = useState("");
 
     const handlechange = (event) => {
         console.log("fun1");
@@ -21,6 +22,14 @@ const Home = () => {
     const handlechange1 = (event) => {
         console.log("fun2");
         Setdescript(event.target.value);
+    }
+    const edit = (event) => {
+        console.log("fun5");
+        Setctitle(event.target.value);
+    }
+    const edit1 = (event) => {
+        console.log("fun6");
+        Setcdescript(event.target.value);
     }
 
     const additem = () => {
@@ -40,6 +49,14 @@ const Home = () => {
             "edit": "false",
         };
         Setnote([...note, newitem]);
+    }
+
+    const editchanges = (index) =>{
+        let newarr = new Array(note);
+        newarr[index].title = ctitle;
+        newarr[index].content = cdescript;
+        newarr[index].edit = "false";
+        Setnote(newarr); 
     }
 
     const removeitem = (element) => {
@@ -73,16 +90,16 @@ const Home = () => {
                                     </div>
                                     <div className="row">
                                         <MdDelete className="btn" onClick={() => removeitem(elem.id)} size={25} style={{ color: "red" }} />
-                                        <MdEdit className="btn" onClick={() => { let newarr = new Array(note); console.log(note); newarr[index].edit = "true"; Setnote(newarr); }} size={25} style={{ color: "orange" }} />
+                                        <MdEdit className="btn" onClick={() => { let newarr = new Array(note); console.log(note); Setctitle(title); Setcdescript(descript); newarr[index].edit = "true"; Setnote(newarr); }} size={25} style={{ color: "orange" }} />
                                     </div>
                                 </div>
                                 <div className={`${elem.edit === "true" ? "add-button" : "add-button ab"}`}>
                                     <label>Title</label>
-                                    <input className="title" value={title} onChange={handlechange} />
+                                    <input className="title" value={ctitle} onChange={edit} />
                                     <label for="content">Description</label>
-                                    <textarea className="textarea1" value={descript} onChange={handlechange1} />
+                                    <textarea className="textarea1" value={cdescript} onChange={edit1} />
                                     <div className="row">
-                                        <input type="button" id="submit" className="submit" value={"Add"} onClick={additem} />
+                                        <input type="button" id="submit" className="submit" value={"Save changes"} onClick={()=> editchanges(index)} />
                                     </div>
                                 </div>
                             </div>

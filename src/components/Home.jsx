@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from "react";
 import '../css/Home.css';
 import { MdDelete, MdEdit } from 'react-icons/md'
+import { GetNotes, CreateNote, DeleteNote, UpdateNote } from "./Backend";
 
 
 const Home = () => {
-
+    const [notes, Setnotes] = useState([]);
+    async function get() {
+        const data = await GetNotes();
+        // console.log("DATA", data);
+        Setnotes(data);
+    }
     useEffect(() => {
-
+        get();
     }, []);
 
     const [title, Settitle] = useState("");
     const [descript, Setdescript] = useState("");
-    const [note, Setnote] = useState([]);
     const [ctitle, Setctitle] = useState("");
     const [cdescript, Setcdescript] = useState("");
 
@@ -32,14 +37,14 @@ const Home = () => {
         Setcdescript(event.target.value);
     }
 
-    const additem = () => {
+    const additem = async() => {
         console.log("fun3");
         let id;
-        if (note.length == null) {
-            id = 0``;
+        if (notes.length == null) {
+            id = 0;
         }
         else {
-            id = note.length + 1;
+            id = notes.length + 1;
         }
         const newitem = {
             "id": id,
@@ -48,23 +53,25 @@ const Home = () => {
             "color": generateColor(),
             "edit": "false",
         };
-        Setnote([...note, newitem]);
+        const res = await CreateNote(newitem);
+        console.log(res);
+        get();
+        Setdescript("");
+        Settitle("");
     }
 
     const editchanges = (index) =>{
-        let newarr = new Array(note);
+        let newarr = notes;
         newarr[index].title = ctitle;
         newarr[index].content = cdescript;
         newarr[index].edit = "false";
-        Setnote(newarr); 
+        UpdateNote(newarr[index]);
+        get();
     }
 
-    const removeitem = (element) => {
-        const newarr = note.filter(function (e) {
-            return e.id !== element;
-        });
-        console.log(newarr);
-        Setnote(newarr);
+    const removeitem = async(element) => {
+        const res = await DeleteNote(element);
+        get();
     }
 
     const generateColor = () => {
@@ -79,7 +86,7 @@ const Home = () => {
             <h1>Notes</h1>
             <div className="notes">
                 {
-                    note.map((elem, index) => {
+                    notes.map((elem, index) => {
                         return (
                             <div>
                                 <div className={`${elem.edit === "false" ? "note" : "note ab"}`} style={{ backgroundColor: `${elem.color}` }}>
@@ -89,8 +96,8 @@ const Home = () => {
                                         <p>{elem.content}</p>
                                     </div>
                                     <div className="row">
-                                        <MdDelete className="btn" onClick={() => removeitem(elem.id)} size={25} style={{ color: "red" }} />
-                                        <MdEdit className="btn" onClick={() => { let newarr = new Array(note); console.log(note); Setctitle(title); Setcdescript(descript); newarr[index].edit = "true"; Setnote(newarr); }} size={25} style={{ color: "orange" }} />
+                                        <MdDelete className="btn" onClick={() => removeitem(elem._id)} size={25} style={{ color: "red" }} />
+                                        <MdEdit className="btn" onClick={() => { let newarr = notes; Setctitle(elem.title); Setcdescript(elem.descript); newarr[index].edit = "true"; UpdateNote(newarr[index]); get(); }} size={25} style={{ color: "orange" }} />
                                     </div>
                                 </div>
                                 <div className={`${elem.edit === "true" ? "add-button" : "add-button ab"}`}>

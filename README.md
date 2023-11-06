@@ -1,6 +1,6 @@
 # Simple Notes App
 
-Sales App is a flutter application which is build to manage orders, collections and expenses of sales person. It acts as a intermediate between sales person and a company.
+Notes App is a simple Notes application which can add, edit and delete notes.
 
 ## Tech Stack
 
